@@ -3,6 +3,16 @@ import math
 import pandas as pd
 import pytest
 
+from fraud_feature_analysis import (
+    FeatureAnalysisConfig,
+    audit_features as audit_feature_efficiency,
+    composite_ranking,
+    feature_stability,
+    rank_features,
+    redundancy_analysis,
+    run_feature_analysis,
+    select_features,
+)
 from fraud_exploration import (
     SECONDS_PER_DAY,
     FraudFactFinder,
@@ -135,3 +145,65 @@ def test_run_exploration_on_minimal_subset_writes_skip_outputs(tmp_path):
     assert (tmp_path / "dataset_audit.csv").exists()
     assert (tmp_path / "binary_feature_analysis_skipped.txt").exists()
     assert (tmp_path / "fraud_similarity_skipped.txt").exists()
+
+
+def test_feature_analysis_ranks_redundancy_and_selection_pipeline():
+    df = pd.DataFrame(
+        {
+            "TransactionID": range(12),
+            "isFraud": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+            "amount": [1, 2, 1, 2, 3, 2, 20, 21, 19, 22, 20, 23],
+            "amount_copy": [1, 2, 1, 2, 3, 2, 20, 21, 19, 22, 20, 23],
+            "constant": ["x"] * 12,
+            "domain": ["a", "a", "b", "b", "a", "b", "z", "z", "z", "y", "z", "y"],
+        }
+    )
+    train = df.iloc[:10].reset_index(drop=True)
+    heldout = df.iloc[10:].reset_index(drop=True)
+    features = ["amount", "amount_copy", "constant", "domain"]
+
+    audit = audit_feature_efficiency(train, features)
+    ranking = rank_features(train, features)
+    stability = feature_stability(train, heldout, features)
+    redundancy_pairs, _ = redundancy_analysis(train, features, threshold=0.99)
+    composite = composite_ranking(
+        audit,
+        ranking,
+        stability,
+        pd.DataFrame({"feature": ["amount", "amount_copy"], "importance": [1.0, 0.9]}),
+        pd.DataFrame(
+            {
+                "feature": ["amount", "amount_copy"],
+                "class_label": [1, 1],
+                "permutation_importance": [0.2, 0.2],
+            }
+        ),
+    )
+    selected = select_features(
+        composite,
+        audit,
+        redundancy_pairs,
+        min_prediction_power=0.01,
+        stability_threshold=1.0,
+    ).set_index("feature")
+
+    assert ranking.set_index("feature").loc["amount", "prediction_power"] > 0
+    assert not redundancy_pairs.empty
+    assert selected.loc["constant", "selected"] == False
+    assert selected.loc["amount", "selected"] != selected.loc["amount_copy", "selected"]
+
+
+def test_feature_analysis_cli_workflow_runs_on_minimal_subset(tmp_path):
+    result = run_feature_analysis(
+        FeatureAnalysisConfig(
+            data_dir="data/example_subset",
+            output_dir=str(tmp_path),
+            max_rows=20,
+        )
+    )
+
+    assert result["rows"] == 20
+    assert result["has_two_classes"] is False
+    assert (tmp_path / "feature_audit.csv").exists()
+    assert (tmp_path / "selected_features.csv").exists()
+    assert (tmp_path / "feature_selection_pipeline.pkl").exists()

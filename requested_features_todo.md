@@ -47,23 +47,23 @@
 
 ## 3. Make The Data Efficient
 
-- [ ] Add a reusable binary feature-analysis package.
-- [ ] Add a leakage-safe general feature-analysis CLI.
-- [ ] Support YAML/JSON config files with CLI overrides.
-- [ ] Support excluded, id, and group columns.
-- [ ] Use train-only analysis before final held-out test evaluation.
-- [ ] Add feature stability analysis.
-- [ ] Add pairwise redundancy and redundancy-cluster analysis.
-- [ ] Add multivariate model-based feature importance.
-- [ ] Compute class-specific permutation importance.
-- [ ] Add composite feature ranking.
-- [ ] Add configurable feature-selection strategies.
-- [ ] Add feature-subset performance evaluation.
-- [ ] Define a minimum prediction-power threshold for dropping weak features.
-- [ ] Drop likely identifier, near-constant, redundant, unstable, and weak-contribution features.
-- [ ] Save selected features, metrics, final pipeline, plots, and reports.
-- [ ] Add a script that runs binary feature analysis on the IEEE-CIS fraud dataset.
-- [ ] Add pytest coverage for ranking, redundancy, selection, and feature-analysis pipelines.
+- [x] Add a reusable binary feature-analysis package.
+- [x] Add a leakage-safe general feature-analysis CLI.
+- [x] Support YAML/JSON config files with CLI overrides.
+- [x] Support excluded, id, and group columns.
+- [x] Use train-only analysis before final held-out test evaluation.
+- [x] Add feature stability analysis.
+- [x] Add pairwise redundancy and redundancy-cluster analysis.
+- [x] Add multivariate model-based feature importance.
+- [x] Compute class-specific permutation importance.
+- [x] Add composite feature ranking.
+- [x] Add configurable feature-selection strategies.
+- [x] Add feature-subset performance evaluation.
+- [x] Define a minimum prediction-power threshold for dropping weak features.
+- [x] Drop likely identifier, near-constant, redundant, unstable, and weak-contribution features.
+- [x] Save selected features, metrics, final pipeline, plots, and reports.
+- [x] Add a script that runs binary feature analysis on the IEEE-CIS fraud dataset.
+- [x] Add pytest coverage for ranking, redundancy, selection, and feature-analysis pipelines.
 
 ## 4. Train Three Different Models
 
