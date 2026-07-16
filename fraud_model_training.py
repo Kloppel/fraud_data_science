@@ -30,9 +30,9 @@ MISSING_TOKEN = "__missing__"
 
 @dataclass
 class ModelTrainingConfig:
-    data_dir: str = "data/example_subset"
-    output_dir: str = "outputs/example_model_training"
-    selected_features_path: str | None = "outputs/example_feature_analysis/selected_features.csv"
+    data_dir: str = "data"
+    output_dir: str = "outputs/full_model_training"
+    selected_features_path: str | None = None
     target_column: str = TARGET_COLUMN
     id_columns: list[str] = field(default_factory=lambda: [ID_COLUMN])
     test_fraction: float = 0.25
@@ -474,11 +474,16 @@ def run_model_training(config: ModelTrainingConfig) -> dict[str, Any]:
     output_dir = Path(config.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     df = FraudDataLoader(config.data_dir).load_train(nrows=config.max_rows)
+    row_count = len(df)
     validate_two_class_target(df[config.target_column])
     train_df, valid_df = stratified_split(
         df, config.target_column, config.test_fraction, config.random_state
     )
     features = choose_features(train_df, config)
+    keep_columns = features + config.id_columns + [config.target_column]
+    train_df = train_df[keep_columns].copy()
+    valid_df = valid_df[keep_columns].copy()
+    del df
     bundle = train_model_bundle(train_df, valid_df, features, config, output_dir)
     test_submission_written = write_test_submission_if_available(
         features, config, output_dir, bundle["preprocessor"], bundle["neural_model"]
@@ -500,7 +505,7 @@ def run_model_training(config: ModelTrainingConfig) -> dict[str, Any]:
     if test_submission_written:
         outputs.append("test_submission.csv")
     summary = {
-        "rows": int(len(df)),
+        "rows": int(row_count),
         "train_rows": int(len(train_df)),
         "validation_rows": int(len(valid_df)),
         "features_used": int(len(features)),
@@ -588,6 +593,7 @@ def write_test_submission_if_available(
     missing = [feature for feature in features if feature not in test_df.columns]
     if missing:
         return False
+    test_df = test_df[features + config.id_columns].copy()
     test_numeric = preprocessor.transform(test_df[features + config.id_columns])
     test_predictions = pd.DataFrame(
         {
@@ -785,10 +791,10 @@ def fill_category(series: pd.Series) -> pd.Series:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train three fraud classifiers.")
-    parser.add_argument("--data-dir", default="data/example_subset")
-    parser.add_argument("--output-dir", default="outputs/example_model_training")
-    parser.add_argument("--selected-features-path", default="outputs/example_feature_analysis/selected_features.csv")
+    parser = argparse.ArgumentParser(description="Train four fraud classifiers.")
+    parser.add_argument("--data-dir", default="data")
+    parser.add_argument("--output-dir", default="outputs/full_model_training")
+    parser.add_argument("--selected-features-path")
     parser.add_argument("--max-rows", type=int)
     parser.add_argument("--max-features", type=int, default=60)
     parser.add_argument("--test-fraction", type=float, default=0.25)

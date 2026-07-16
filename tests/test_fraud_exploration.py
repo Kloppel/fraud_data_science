@@ -255,12 +255,14 @@ def test_model_training_shapes_metrics_and_submission_formatting(tmp_path):
     predictions = pd.read_csv(tmp_path / "outputs" / "validation_predictions.csv")
 
     assert result["train_rows"] == 8
-    assert set(metrics["model"]) == {
+    expected_models = {
         "rules_based",
         "decision_tree",
         "neural_network",
         "random_contender",
     }
+    assert set(metrics["model"]) == expected_models
+    assert set(confusion["model"]) == expected_models
     assert {"tn", "fp", "fn", "tp"}.issubset(confusion.columns)
     assert not tree_rules.empty
     assert (tmp_path / "outputs" / "decision_tree_rules.md").exists()
