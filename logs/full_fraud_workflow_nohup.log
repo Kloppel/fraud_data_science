@@ -1,0 +1,16 @@
++ trap 'echo "Full fraud workflow failed at line ${LINENO} with exit code $?."' ERR
++ mkdir -p logs outputs/full_exploration outputs/full_feature_analysis outputs/full_model_training
+++ date '+%Y-%m-%d %H:%M:%S %Z'
++ START_TS='2026-07-16 18:37:07 CEST'
++ echo 'Started full fraud workflow at 2026-07-16 18:37:07 CEST'
+Started full fraud workflow at 2026-07-16 18:37:07 CEST
++ PYTHON_CMD=(/home/pbuser/anaconda3/envs/fraud/bin/python)
++ echo 'Running exploration.'
+Running exploration.
++ /home/pbuser/anaconda3/envs/fraud/bin/python fraud_exploration.py --data-dir data --output-dir outputs/full_exploration --similarity-sample-size 30
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:83: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined["has_identity"] = (joined["_identity_join"] == "both").astype(int)
