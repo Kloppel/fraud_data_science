@@ -13,6 +13,13 @@ from fraud_feature_analysis import (
     run_feature_analysis,
     select_features,
 )
+from fraud_model_training import (
+    ModelTrainingConfig,
+    NeuralNetworkFraudClassifier,
+    compare_models,
+    run_model_training,
+    write_submission,
+)
 from fraud_exploration import (
     SECONDS_PER_DAY,
     FraudFactFinder,
@@ -207,3 +214,64 @@ def test_feature_analysis_cli_workflow_runs_on_minimal_subset(tmp_path):
     assert (tmp_path / "feature_audit.csv").exists()
     assert (tmp_path / "selected_features.csv").exists()
     assert (tmp_path / "feature_selection_pipeline.pkl").exists()
+
+
+def test_model_training_shapes_metrics_and_submission_formatting(tmp_path):
+    train_transaction = pd.DataFrame(
+        {
+            "TransactionID": range(1, 13),
+            "isFraud": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+            "TransactionDT": range(12),
+            "TransactionAmt": [8, 12, 9, 11, 13, 10, 90, 95, 88, 100, 93, 97],
+            "ProductCD": ["W", "W", "C", "W", "C", "W", "R", "R", "R", "H", "R", "H"],
+            "card4": ["visa"] * 6 + ["mastercard"] * 6,
+        }
+    )
+    train_identity = pd.DataFrame(
+        {
+            "TransactionID": range(1, 13),
+            "DeviceType": ["desktop"] * 6 + ["mobile"] * 6,
+        }
+    )
+    train_transaction.to_csv(tmp_path / "train_transaction.csv", index=False)
+    train_identity.to_csv(tmp_path / "train_identity.csv", index=False)
+
+    result = run_model_training(
+        ModelTrainingConfig(
+            data_dir=str(tmp_path),
+            output_dir=str(tmp_path / "outputs"),
+            selected_features_path=None,
+            max_features=4,
+            epochs=20,
+            hidden_units=4,
+        )
+    )
+
+    metrics = pd.read_csv(tmp_path / "outputs" / "model_comparison_metrics.csv")
+    confusion = pd.read_csv(tmp_path / "outputs" / "confusion_matrices.csv")
+    submission = pd.read_csv(tmp_path / "outputs" / "validation_submission.csv")
+    predictions = pd.read_csv(tmp_path / "outputs" / "validation_predictions.csv")
+
+    assert result["train_rows"] == 8
+    assert set(metrics["model"]) == {"rules_based", "neural_network", "random_contender"}
+    assert {"tn", "fp", "fn", "tp"}.issubset(confusion.columns)
+    assert submission.columns.tolist() == ["TransactionID", "isFraud"]
+    assert len(submission) == result["validation_rows"]
+    assert predictions[["rules_based", "neural_network", "random_contender"]].shape == (4, 3)
+
+
+def test_neural_network_prediction_output_shape_and_submission_writer(tmp_path):
+    X = pd.DataFrame({"amount": [0.0, 0.1, 0.9, 1.0], "flag": [0, 0, 1, 1]})
+    y = pd.Series([0, 0, 1, 1])
+    model = NeuralNetworkFraudClassifier(hidden_units=3, epochs=10, random_state=0).fit(X, y)
+    scores = model.predict_proba(X)
+
+    assert scores.shape == (4,)
+    assert ((scores >= 0.0) & (scores <= 1.0)).all()
+
+    predictions = pd.DataFrame({"TransactionID": [1, 2, 3, 4], "nn": scores})
+    write_submission(predictions, tmp_path / "submission.csv")
+    submission = pd.read_csv(tmp_path / "submission.csv")
+
+    assert submission.columns.tolist() == ["TransactionID", "isFraud"]
+    assert len(compare_models(pd.DataFrame({"TransactionID": [1, 2], "actual": [0, 1], "nn": [0.2, 0.8]}))[0]) == 1
