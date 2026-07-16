@@ -14,6 +14,7 @@ from fraud_feature_analysis import (
     select_features,
 )
 from fraud_model_training import (
+    HumanDecisionTreeFraudClassifier,
     ModelTrainingConfig,
     NeuralNetworkFraudClassifier,
     compare_models,
@@ -249,15 +250,46 @@ def test_model_training_shapes_metrics_and_submission_formatting(tmp_path):
 
     metrics = pd.read_csv(tmp_path / "outputs" / "model_comparison_metrics.csv")
     confusion = pd.read_csv(tmp_path / "outputs" / "confusion_matrices.csv")
+    tree_rules = pd.read_csv(tmp_path / "outputs" / "decision_tree_rules.csv")
     submission = pd.read_csv(tmp_path / "outputs" / "validation_submission.csv")
     predictions = pd.read_csv(tmp_path / "outputs" / "validation_predictions.csv")
 
     assert result["train_rows"] == 8
-    assert set(metrics["model"]) == {"rules_based", "neural_network", "random_contender"}
+    assert set(metrics["model"]) == {
+        "rules_based",
+        "decision_tree",
+        "neural_network",
+        "random_contender",
+    }
     assert {"tn", "fp", "fn", "tp"}.issubset(confusion.columns)
+    assert not tree_rules.empty
+    assert (tmp_path / "outputs" / "decision_tree_rules.md").exists()
     assert submission.columns.tolist() == ["TransactionID", "isFraud"]
     assert len(submission) == result["validation_rows"]
-    assert predictions[["rules_based", "neural_network", "random_contender"]].shape == (4, 3)
+    assert predictions[
+        ["rules_based", "decision_tree", "neural_network", "random_contender"]
+    ].shape == (4, 4)
+
+
+def test_human_decision_tree_outputs_readable_rules_and_scores():
+    df = pd.DataFrame(
+        {
+            "TransactionID": range(8),
+            "isFraud": [0, 0, 0, 0, 1, 1, 1, 1],
+            "amount": [5, 6, 7, 8, 50, 60, 70, 80],
+            "device": ["desktop", "desktop", "mobile", "desktop", "mobile", "mobile", "mobile", "desktop"],
+        }
+    )
+    tree = HumanDecisionTreeFraudClassifier(max_depth=2).fit(
+        df, ["amount", "device"], "isFraud"
+    )
+    scores = tree.predict_proba(df)
+    rules = tree.rules_frame()
+
+    assert scores.shape == (8,)
+    assert ((scores >= 0.0) & (scores <= 1.0)).all()
+    assert not rules.empty
+    assert "amount" in tree.rules_markdown() or "device" in tree.rules_markdown()
 
 
 def test_neural_network_prediction_output_shape_and_submission_writer(tmp_path):

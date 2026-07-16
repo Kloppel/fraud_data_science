@@ -65,17 +65,18 @@
 - [x] Add a script that runs binary feature analysis on the IEEE-CIS fraud dataset.
 - [x] Add pytest coverage for ranking, redundancy, selection, and feature-analysis pipelines.
 
-## 4. Train Three Different Models
+## 4. Train Four Different Models
 
-- [ ] Train a rules-based fraud classifier on the selected feature set.
-- [ ] Define interpretable fraud rules from explored correlations, thresholds, and categorical patterns.
-- [ ] Train a neural-network binary classifier for `isFraud`.
-- [ ] Add class-imbalance handling for model training.
-- [ ] Add validation split or cross-validation for all trained models.
-- [ ] Train a random-contender baseline model.
-- [ ] Compare all three models against common metrics.
-- [ ] Include confusion matrix, ROC-AUC, precision, recall, F1, and PR-AUC.
-- [ ] Save model artifacts and preprocessing artifacts for each model.
-- [ ] Save predictions in Kaggle submission format.
-- [ ] Add repeatable training scripts for all three models.
-- [ ] Add tests for model input shape, prediction output shape, and submission formatting.
+- [x] Train a rules-based fraud classifier on the selected feature set.
+- [x] Define interpretable fraud rules from explored correlations, thresholds, and categorical patterns.
+- [x] Train a completely human-understandable decision tree fraud classifier and export its rules.
+- [x] Train a neural-network binary classifier for `isFraud`.
+- [x] Add class-imbalance handling for model training.
+- [x] Add validation split or cross-validation for all trained models.
+- [x] Train a random-contender baseline model.
+- [x] Compare all four models against common metrics.
+- [x] Include confusion matrix, ROC-AUC, precision, recall, F1, and PR-AUC.
+- [x] Save model artifacts and preprocessing artifacts for each model.
+- [x] Save predictions in Kaggle submission format.
+- [x] Add repeatable training scripts for all four models.
+- [x] Add tests for model input shape, prediction output shape, and submission formatting.

@@ -1,9 +1,10 @@
-"""Train and compare three compact fraud classifiers for workpacket 4.
+"""Train and compare compact fraud classifiers for workpacket 4.
 
 The module is intentionally self-contained: it loads IEEE-CIS training data,
-uses the selected feature artifact when available, fits a rules classifier, a
-small neural-network classifier, and a random contender baseline, then writes
-metrics, model artifacts, and Kaggle-shaped prediction files.
+uses the selected feature artifact when available, fits interpretable rules, a
+human-readable decision tree, a small neural-network classifier, and a random
+contender baseline, then writes metrics, model artifacts, and Kaggle-shaped
+prediction files.
 """
 
 from __future__ import annotations
@@ -39,6 +40,7 @@ class ModelTrainingConfig:
     max_rows: int | None = None
     max_features: int = 60
     max_rules: int = 12
+    max_tree_depth: int = 3
     hidden_units: int = 12
     learning_rate: float = 0.05
     epochs: int = 250
@@ -55,6 +57,7 @@ class ModelTrainingConfig:
             "max_rows": self.max_rows,
             "max_features": self.max_features,
             "max_rules": self.max_rules,
+            "max_tree_depth": self.max_tree_depth,
             "hidden_units": self.hidden_units,
             "learning_rate": self.learning_rate,
             "epochs": self.epochs,
@@ -185,6 +188,203 @@ class RuleBasedFraudClassifier:
         return fill_category(df[feature]) == str(rule["value"])
 
 
+class HumanDecisionTreeFraudClassifier:
+    """Small binary decision tree with plain-language threshold/equality rules."""
+
+    def __init__(
+        self,
+        max_depth: int = 3,
+        min_leaf_size: int = 2,
+        max_category_values: int = 12,
+    ) -> None:
+        self.max_depth = max_depth
+        self.min_leaf_size = min_leaf_size
+        self.max_category_values = max_category_values
+        self.tree_: dict[str, Any] | None = None
+        self.features_: list[str] = []
+
+    def fit(self, df: pd.DataFrame, features: list[str], target_column: str) -> "HumanDecisionTreeFraudClassifier":
+        self.features_ = [feature for feature in features if feature in df.columns]
+        y = df[target_column].astype(int).reset_index(drop=True)
+        x = df[self.features_].reset_index(drop=True)
+        weights = pd.Series(balanced_sample_weights(y), index=x.index)
+        self.tree_ = self._build_node(x, y, weights, depth=0)
+        return self
+
+    def predict_proba(self, df: pd.DataFrame) -> np.ndarray:
+        if self.tree_ is None:
+            raise ValueError("Model is not fitted.")
+        rows = df.reset_index(drop=True)
+        return np.array([self._predict_row(row, self.tree_) for _, row in rows.iterrows()])
+
+    def rules_frame(self) -> pd.DataFrame:
+        if self.tree_ is None:
+            return pd.DataFrame(columns=["path", "prediction", "samples", "fraud_rate"])
+        rows: list[dict[str, Any]] = []
+        self._collect_rules(self.tree_, [], rows)
+        return pd.DataFrame(rows)
+
+    def rules_markdown(self) -> str:
+        rules = self.rules_frame()
+        lines = ["# Human Decision Tree Rules", ""]
+        if rules.empty:
+            lines.append("_No rules._")
+            return "\n".join(lines)
+        for idx, row in rules.iterrows():
+            lines.append(f"## Leaf {idx + 1}")
+            lines.append("")
+            lines.append(f"- If: {row['path']}")
+            lines.append(f"- Predicted fraud probability: {row['prediction']:.4f}")
+            lines.append(f"- Training samples: {int(row['samples'])}")
+            lines.append(f"- Training fraud rate: {row['fraud_rate']:.4f}")
+            lines.append("")
+        return "\n".join(lines)
+
+    def save(self, path: str | Path) -> None:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("wb") as file:
+            pickle.dump(self, file)
+
+    def _build_node(
+        self,
+        x: pd.DataFrame,
+        y: pd.Series,
+        weights: pd.Series,
+        depth: int,
+    ) -> dict[str, Any]:
+        node = self._leaf_node(y, weights)
+        if depth >= self.max_depth or len(x) < 2 * self.min_leaf_size or y.nunique() <= 1:
+            return node
+        split = self._best_split(x, y, weights)
+        if split is None:
+            return node
+        left_mask = split["mask"]
+        right_mask = ~left_mask
+        node.update(
+            {
+                "is_leaf": False,
+                "split": {key: value for key, value in split.items() if key != "mask"},
+                "left": self._build_node(
+                    x[left_mask].reset_index(drop=True),
+                    y[left_mask].reset_index(drop=True),
+                    weights[left_mask].reset_index(drop=True),
+                    depth + 1,
+                ),
+                "right": self._build_node(
+                    x[right_mask].reset_index(drop=True),
+                    y[right_mask].reset_index(drop=True),
+                    weights[right_mask].reset_index(drop=True),
+                    depth + 1,
+                ),
+            }
+        )
+        return node
+
+    def _best_split(
+        self, x: pd.DataFrame, y: pd.Series, weights: pd.Series
+    ) -> dict[str, Any] | None:
+        parent_impurity = weighted_gini(y, weights)
+        best: dict[str, Any] | None = None
+        for feature in self.features_:
+            if feature not in x:
+                continue
+            for candidate in self._split_candidates(x[feature], feature):
+                mask = self._candidate_mask(x[feature], candidate)
+                left_n = int(mask.sum())
+                right_n = int((~mask).sum())
+                if left_n < self.min_leaf_size or right_n < self.min_leaf_size:
+                    continue
+                left_weight = float(weights[mask].sum())
+                right_weight = float(weights[~mask].sum())
+                total_weight = left_weight + right_weight
+                impurity = (
+                    left_weight / total_weight * weighted_gini(y[mask], weights[mask])
+                    + right_weight / total_weight * weighted_gini(y[~mask], weights[~mask])
+                )
+                gain = parent_impurity - impurity
+                if best is None or gain > best["gain"]:
+                    best = {**candidate, "mask": mask, "gain": float(gain)}
+        if best is None or best["gain"] <= 0:
+            return None
+        return best
+
+    def _split_candidates(self, series: pd.Series, feature: str) -> list[dict[str, Any]]:
+        if pd.api.types.is_numeric_dtype(series):
+            numeric = pd.to_numeric(series, errors="coerce")
+            thresholds = numeric.dropna().quantile([0.25, 0.5, 0.75]).dropna().unique()
+            return [
+                {
+                    "feature": feature,
+                    "kind": "numeric",
+                    "operator": "<=",
+                    "value": float(threshold),
+                }
+                for threshold in thresholds
+            ]
+        filled = fill_category(series)
+        values = filled.value_counts().head(self.max_category_values).index.tolist()
+        return [
+            {
+                "feature": feature,
+                "kind": "categorical",
+                "operator": "==",
+                "value": str(value),
+            }
+            for value in values
+        ]
+
+    @staticmethod
+    def _candidate_mask(series: pd.Series, candidate: dict[str, Any]) -> pd.Series:
+        if candidate["kind"] == "numeric":
+            return pd.to_numeric(series, errors="coerce") <= float(candidate["value"])
+        return fill_category(series) == str(candidate["value"])
+
+    @staticmethod
+    def _leaf_node(y: pd.Series, weights: pd.Series) -> dict[str, Any]:
+        weighted_positive = float(weights[y == 1].sum())
+        weighted_total = float(weights.sum())
+        return {
+            "is_leaf": True,
+            "prediction": safe_divide(weighted_positive, weighted_total),
+            "samples": int(len(y)),
+            "fraud_rate": float(y.mean()) if len(y) else 0.0,
+        }
+
+    def _predict_row(self, row: pd.Series, node: dict[str, Any]) -> float:
+        if node["is_leaf"]:
+            return float(node["prediction"])
+        split = node["split"]
+        if split["kind"] == "numeric":
+            value = pd.to_numeric(pd.Series([row.get(split["feature"])]), errors="coerce").iloc[0]
+            go_left = pd.notna(value) and float(value) <= float(split["value"])
+        else:
+            go_left = str(row.get(split["feature"], MISSING_TOKEN)) == str(split["value"])
+        return self._predict_row(row, node["left"] if go_left else node["right"])
+
+    def _collect_rules(
+        self,
+        node: dict[str, Any],
+        path: list[str],
+        rows: list[dict[str, Any]],
+    ) -> None:
+        if node["is_leaf"]:
+            rows.append(
+                {
+                    "path": " AND ".join(path) if path else "always",
+                    "prediction": float(node["prediction"]),
+                    "samples": int(node["samples"]),
+                    "fraud_rate": float(node["fraud_rate"]),
+                }
+            )
+            return
+        split = node["split"]
+        condition = format_tree_condition(split, positive=True)
+        inverse = format_tree_condition(split, positive=False)
+        self._collect_rules(node["left"], path + [condition], rows)
+        self._collect_rules(node["right"], path + [inverse], rows)
+
+
 class NeuralNetworkFraudClassifier:
     """Small one-hidden-layer neural network trained with balanced sample weights."""
 
@@ -287,12 +487,15 @@ def run_model_training(config: ModelTrainingConfig) -> dict[str, Any]:
         "model_comparison_metrics.csv",
         "confusion_matrices.csv",
         "rules_based_model.pkl",
+        "decision_tree_model.pkl",
         "neural_network_model.pkl",
         "random_contender_model.pkl",
         "numeric_preprocessor.pkl",
         "validation_predictions.csv",
         "validation_submission.csv",
         "interpretable_rules.csv",
+        "decision_tree_rules.csv",
+        "decision_tree_rules.md",
     ]
     if test_submission_written:
         outputs.append("test_submission.csv")
@@ -327,6 +530,9 @@ def train_model_bundle(
     rules = RuleBasedFraudClassifier(max_rules=config.max_rules).fit(
         train_df, features, config.target_column
     )
+    decision_tree = HumanDecisionTreeFraudClassifier(max_depth=config.max_tree_depth).fit(
+        train_df, features, config.target_column
+    )
     neural = NeuralNetworkFraudClassifier(
         hidden_units=config.hidden_units,
         learning_rate=config.learning_rate,
@@ -340,6 +546,7 @@ def train_model_bundle(
             ID_COLUMN: valid_df[ID_COLUMN].to_numpy(),
             "actual": y_valid.to_numpy(),
             "rules_based": rules.predict_proba(valid_df),
+            "decision_tree": decision_tree.predict_proba(valid_df),
             "neural_network": neural.predict_proba(valid_numeric),
             "random_contender": random_model.predict_proba(len(valid_df)),
         }
@@ -350,7 +557,10 @@ def train_model_bundle(
     predictions.to_csv(output_dir / "validation_predictions.csv", index=False)
     write_submission(predictions[[ID_COLUMN, "neural_network"]], output_dir / "validation_submission.csv")
     rules.rules_frame().to_csv(output_dir / "interpretable_rules.csv", index=False)
+    decision_tree.rules_frame().to_csv(output_dir / "decision_tree_rules.csv", index=False)
+    (output_dir / "decision_tree_rules.md").write_text(decision_tree.rules_markdown())
     rules.save(output_dir / "rules_based_model.pkl")
+    decision_tree.save(output_dir / "decision_tree_model.pkl")
     neural.save(output_dir / "neural_network_model.pkl")
     random_model.save(output_dir / "random_contender_model.pkl")
     preprocessor.save(output_dir / "numeric_preprocessor.pkl")
@@ -360,6 +570,7 @@ def train_model_bundle(
         "predictions": predictions,
         "preprocessor": preprocessor,
         "neural_model": neural,
+        "decision_tree_model": decision_tree,
     }
 
 
@@ -544,6 +755,26 @@ def balanced_sample_weights(y: pd.Series) -> np.ndarray:
     return weights
 
 
+def weighted_gini(y: pd.Series, weights: pd.Series) -> float:
+    total = float(weights.sum())
+    if total <= 0:
+        return 0.0
+    positive_weight = float(weights[y.astype(int) == 1].sum())
+    p_positive = positive_weight / total
+    p_negative = 1.0 - p_positive
+    return 1.0 - p_positive**2 - p_negative**2
+
+
+def format_tree_condition(split: dict[str, Any], positive: bool) -> str:
+    feature = split["feature"]
+    value = split["value"]
+    if split["kind"] == "numeric":
+        operator = "<=" if positive else ">"
+        return f"{feature} {operator} {float(value):.6g}"
+    operator = "==" if positive else "!="
+    return f"{feature} {operator} {value}"
+
+
 def sigmoid(values: np.ndarray) -> np.ndarray:
     values = np.clip(values, -35, 35)
     return 1.0 / (1.0 + np.exp(-values))
@@ -563,6 +794,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--test-fraction", type=float, default=0.25)
     parser.add_argument("--random-state", type=int, default=42)
     parser.add_argument("--max-rules", type=int, default=12)
+    parser.add_argument("--max-tree-depth", type=int, default=3)
     parser.add_argument("--hidden-units", type=int, default=12)
     parser.add_argument("--learning-rate", type=float, default=0.05)
     parser.add_argument("--epochs", type=int, default=250)
@@ -580,6 +812,7 @@ def main() -> None:
         test_fraction=args.test_fraction,
         random_state=args.random_state,
         max_rules=args.max_rules,
+        max_tree_depth=args.max_tree_depth,
         hidden_units=args.hidden_units,
         learning_rate=args.learning_rate,
         epochs=args.epochs,
