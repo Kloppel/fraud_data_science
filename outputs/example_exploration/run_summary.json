@@ -1,0 +1,14 @@
+{
+  "rows": 40,
+  "fraud_rows": 0,
+  "outputs": [
+    "fraud_fact_finder.md",
+    "dataset_audit.csv",
+    "binary_feature_analysis_skipped.txt",
+    "fraud_similarity_skipped.txt"
+  ],
+  "shap": {
+    "available": true,
+    "reason": "shap is installed; add a fitted model to compute attributions"
+  }
+}
