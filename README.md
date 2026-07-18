@@ -87,10 +87,11 @@ The repository also includes example feature-analysis outputs in `outputs/exampl
 
 [fraud_model_training.py](fraud_model_training.py) trains and compares fraud classifiers.
 
-The current training workflow includes four model outputs:
+The current training workflow includes five model outputs:
 
 - `rules_based`: a manually interpretable rule scorer built from high-risk thresholds and categories.
 - `decision_tree`: a small human-readable decision tree that exports leaf rules.
+- `random_forest`: a bagged ensemble of decision trees (bootstrap-sampled rows, random feature subset per split), averaged into one fraud probability.
 - `neural_network`: a small NumPy neural network for binary fraud classification.
 - `random_contender`: a seeded random baseline centered around the observed fraud rate.
 
@@ -124,8 +125,13 @@ conda run -n fraud python fraud_model_training.py \
   --epochs 10 \
   --hidden-units 6 \
   --max-rules 6 \
-  --max-tree-depth 3
+  --max-tree-depth 3 \
+  --forest-n-estimators 15 \
+  --forest-max-depth 3
 ```
+
+The random forest also accepts `--forest-max-features-per-split` (defaults to `sqrt(n_features)`
+per split, matching the usual random-forest heuristic).
 
 Expected model-training outputs include:
 
@@ -139,6 +145,7 @@ Expected model-training outputs include:
 - `decision_tree_rules.md`
 - `rules_based_model.pkl`
 - `decision_tree_model.pkl`
+- `random_forest_model.pkl`
 - `neural_network_model.pkl`
 - `random_contender_model.pkl`
 - `numeric_preprocessor.pkl`
@@ -208,4 +215,4 @@ Runtime dependencies are listed in [requirements.txt](requirements.txt).
 
 ## Important Clarification
 
-The current training script does not train a random forest. The four current outputs are rules-based, decision tree, neural network, and random-contender baseline. If the desired final model set is exactly neural network, random forest, and decision tree, the random-contender baseline should be replaced or supplemented with a real random forest implementation.
+The training script produces five model outputs: rules-based, decision tree, random forest, neural network, and a random-contender baseline. The random forest is a bagged ensemble built from the same decision-tree logic as `decision_tree` (bootstrap-sampled rows plus a random feature subset per split), not an external library implementation.

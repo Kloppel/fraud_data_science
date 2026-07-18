@@ -262,11 +262,12 @@ module stays self-contained)
 
 ## fraud_model_training.py
 
-Trains and compares four fraud classifiers, all sharing the same validation split and metrics.
+Trains and compares five fraud classifiers, all sharing the same validation split and metrics.
 
 - **`ModelTrainingConfig`** (dataclass) — knobs for data/output dirs, an optional path to a
   selected-features CSV (from stage 3), split fraction/seed, row/feature caps, and hyperparameters
-  for the rule count, tree depth, and neural net (hidden units, learning rate, epochs).
+  for the rule count, tree depth, neural net (hidden units, learning rate, epochs), and random
+  forest (`forest_n_estimators`, `forest_max_depth`, `forest_max_features_per_split`).
 
 **`RuleBasedFraudClassifier`** — an interpretable scorer built from simple high-precision rules.
 - **`fit`** — for each feature, generates numeric threshold rules (`_numeric_rules`) or categorical
@@ -320,15 +321,30 @@ NumPy (no ML framework dependency).
   cluster around the true prior but aren't literally identical every row.
 - **`save`** — pickles it.
 
+**`_RandomForestTree`** (subclasses `HumanDecisionTreeFraudClassifier`) — the per-tree building
+block of the random forest; identical to the human-readable tree except `_best_split` first draws
+a random subset of `max_features_per_split` features (via an injected `np.random.Generator`) and
+searches only that subset for the best split, instead of every feature.
+
+**`RandomForestFraudClassifier`** — a bagged ensemble of `_RandomForestTree` instances, averaged
+into one fraud probability. Not really "human-readable" like the other interpretable models — it
+exists as a stronger, still from-scratch (no sklearn) benchmark alongside them.
+- **`fit`** — for each of `n_estimators` trees: draws a bootstrap sample of rows (sampling with
+  replacement, same size as the input), builds a `_RandomForestTree` with its own independent RNG
+  (derived from the ensemble's seed) and a default `max_features_per_split` of `sqrt(n_features)`
+  if not explicitly set, and fits it on that bootstrap sample.
+- **`predict_proba`** — averages every tree's `predict_proba` output column-wise.
+- **`save`** — pickles the fitted ensemble (all trees included).
+
 **Orchestration**
 - **`run_model_training`** — loads training data, validates both classes are present, does a
   `stratified_split`, picks features via `choose_features`, then calls `train_model_bundle` and
   `write_test_submission_if_available`; writes `run_summary.json`.
 - **`train_model_bundle`** — fits the shared `NumericPreprocessor` (for the neural net's numeric
-  input) plus all four classifiers on the same train split, scores all four on the same validation
+  input) plus all five classifiers on the same train split, scores all five on the same validation
   split into one `predictions` frame, computes comparison metrics via `compare_models`, and writes
   every CSV/Markdown/pickle output (metrics, confusion matrices, validation predictions/submission,
-  rule tables, and all four model pickles plus the preprocessor pickle).
+  rule tables, and all five model pickles plus the preprocessor pickle).
 - **`write_test_submission_if_available`** — if `data/test_transaction.csv` etc. exist and contain
   all the chosen features, scores the (neural network only) test set and writes
   `test_submission.csv`; returns `False` silently if test data isn't available so the smoke-test

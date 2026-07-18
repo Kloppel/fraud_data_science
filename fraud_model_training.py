@@ -44,6 +44,9 @@ class ModelTrainingConfig:
     hidden_units: int = 12
     learning_rate: float = 0.05
     epochs: int = 250
+    forest_n_estimators: int = 50
+    forest_max_depth: int = 4
+    forest_max_features_per_split: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -61,6 +64,9 @@ class ModelTrainingConfig:
             "hidden_units": self.hidden_units,
             "learning_rate": self.learning_rate,
             "epochs": self.epochs,
+            "forest_n_estimators": self.forest_n_estimators,
+            "forest_max_depth": self.forest_max_depth,
+            "forest_max_features_per_split": self.forest_max_features_per_split,
         }
 
 
@@ -282,11 +288,15 @@ class HumanDecisionTreeFraudClassifier:
         return node
 
     def _best_split(
-        self, x: pd.DataFrame, y: pd.Series, weights: pd.Series
+        self,
+        x: pd.DataFrame,
+        y: pd.Series,
+        weights: pd.Series,
+        feature_pool: list[str] | None = None,
     ) -> dict[str, Any] | None:
         parent_impurity = weighted_gini(y, weights)
         best: dict[str, Any] | None = None
-        for feature in self.features_:
+        for feature in feature_pool if feature_pool is not None else self.features_:
             if feature not in x:
                 continue
             for candidate in self._split_candidates(x[feature], feature):
@@ -470,6 +480,93 @@ class RandomContenderClassifier:
             pickle.dump(self, file)
 
 
+class _RandomForestTree(HumanDecisionTreeFraudClassifier):
+    """Decision tree that considers a random feature subset at every split."""
+
+    def __init__(
+        self,
+        max_depth: int,
+        min_leaf_size: int,
+        max_category_values: int,
+        max_features_per_split: int,
+        rng: np.random.Generator,
+    ) -> None:
+        super().__init__(
+            max_depth=max_depth,
+            min_leaf_size=min_leaf_size,
+            max_category_values=max_category_values,
+        )
+        self.max_features_per_split = max_features_per_split
+        self._rng = rng
+
+    def _best_split(
+        self, x: pd.DataFrame, y: pd.Series, weights: pd.Series
+    ) -> dict[str, Any] | None:
+        pool = self.features_
+        if self.max_features_per_split < len(pool):
+            pool = list(
+                self._rng.choice(pool, size=self.max_features_per_split, replace=False)
+            )
+        return super()._best_split(x, y, weights, feature_pool=pool)
+
+
+class RandomForestFraudClassifier:
+    """Bagged ensemble of small decision trees, averaged into one fraud probability."""
+
+    def __init__(
+        self,
+        n_estimators: int = 50,
+        max_depth: int = 4,
+        min_leaf_size: int = 2,
+        max_category_values: int = 12,
+        max_features_per_split: int | None = None,
+        random_state: int = 42,
+    ) -> None:
+        self.n_estimators = n_estimators
+        self.max_depth = max_depth
+        self.min_leaf_size = min_leaf_size
+        self.max_category_values = max_category_values
+        self.max_features_per_split = max_features_per_split
+        self.random_state = random_state
+        self.trees_: list[_RandomForestTree] = []
+
+    def fit(
+        self, df: pd.DataFrame, features: list[str], target_column: str
+    ) -> "RandomForestFraudClassifier":
+        rng = np.random.default_rng(self.random_state)
+        max_features_per_split = self.max_features_per_split or max(
+            1, int(math.sqrt(len(features)))
+        )
+        n_rows = len(df)
+        df = df.reset_index(drop=True)
+        self.trees_ = []
+        for _ in range(self.n_estimators):
+            bootstrap_rows = rng.integers(0, n_rows, size=n_rows)
+            sample = df.iloc[bootstrap_rows].reset_index(drop=True)
+            tree = _RandomForestTree(
+                max_depth=self.max_depth,
+                min_leaf_size=self.min_leaf_size,
+                max_category_values=self.max_category_values,
+                max_features_per_split=max_features_per_split,
+                rng=np.random.default_rng(rng.integers(0, 2**32 - 1)),
+            )
+            tree.fit(sample, features, target_column)
+            self.trees_.append(tree)
+        return self
+
+    def predict_proba(self, df: pd.DataFrame) -> np.ndarray:
+        if not self.trees_:
+            raise ValueError("Model is not fitted.")
+        tree_scores = np.column_stack([tree.predict_proba(df) for tree in self.trees_])
+        return tree_scores.mean(axis=1)
+
+    def save(self, path: str | Path) -> None:
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("wb") as file:
+            pickle.dump(self, file)
+
+
 def run_model_training(config: ModelTrainingConfig) -> dict[str, Any]:
     output_dir = Path(config.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -493,6 +590,7 @@ def run_model_training(config: ModelTrainingConfig) -> dict[str, Any]:
         "confusion_matrices.csv",
         "rules_based_model.pkl",
         "decision_tree_model.pkl",
+        "random_forest_model.pkl",
         "neural_network_model.pkl",
         "random_contender_model.pkl",
         "numeric_preprocessor.pkl",
@@ -538,6 +636,12 @@ def train_model_bundle(
     decision_tree = HumanDecisionTreeFraudClassifier(max_depth=config.max_tree_depth).fit(
         train_df, features, config.target_column
     )
+    forest = RandomForestFraudClassifier(
+        n_estimators=config.forest_n_estimators,
+        max_depth=config.forest_max_depth,
+        max_features_per_split=config.forest_max_features_per_split,
+        random_state=config.random_state,
+    ).fit(train_df, features, config.target_column)
     neural = NeuralNetworkFraudClassifier(
         hidden_units=config.hidden_units,
         learning_rate=config.learning_rate,
@@ -552,6 +656,7 @@ def train_model_bundle(
             "actual": y_valid.to_numpy(),
             "rules_based": rules.predict_proba(valid_df),
             "decision_tree": decision_tree.predict_proba(valid_df),
+            "random_forest": forest.predict_proba(valid_df),
             "neural_network": neural.predict_proba(valid_numeric),
             "random_contender": random_model.predict_proba(len(valid_df)),
         }
@@ -566,6 +671,7 @@ def train_model_bundle(
     (output_dir / "decision_tree_rules.md").write_text(decision_tree.rules_markdown())
     rules.save(output_dir / "rules_based_model.pkl")
     decision_tree.save(output_dir / "decision_tree_model.pkl")
+    forest.save(output_dir / "random_forest_model.pkl")
     neural.save(output_dir / "neural_network_model.pkl")
     random_model.save(output_dir / "random_contender_model.pkl")
     preprocessor.save(output_dir / "numeric_preprocessor.pkl")
@@ -804,6 +910,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--hidden-units", type=int, default=12)
     parser.add_argument("--learning-rate", type=float, default=0.05)
     parser.add_argument("--epochs", type=int, default=250)
+    parser.add_argument("--forest-n-estimators", type=int, default=50)
+    parser.add_argument("--forest-max-depth", type=int, default=4)
+    parser.add_argument("--forest-max-features-per-split", type=int, default=None)
     return parser.parse_args()
 
 
@@ -822,6 +931,9 @@ def main() -> None:
         hidden_units=args.hidden_units,
         learning_rate=args.learning_rate,
         epochs=args.epochs,
+        forest_n_estimators=args.forest_n_estimators,
+        forest_max_depth=args.forest_max_depth,
+        forest_max_features_per_split=args.forest_max_features_per_split,
     )
     result = run_model_training(config)
     print(json.dumps(result, indent=2))

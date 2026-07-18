@@ -17,6 +17,7 @@ from fraud_model_training import (
     HumanDecisionTreeFraudClassifier,
     ModelTrainingConfig,
     NeuralNetworkFraudClassifier,
+    RandomForestFraudClassifier,
     compare_models,
     run_model_training,
     write_submission,
@@ -258,6 +259,7 @@ def test_model_training_shapes_metrics_and_submission_formatting(tmp_path):
     expected_models = {
         "rules_based",
         "decision_tree",
+        "random_forest",
         "neural_network",
         "random_contender",
     }
@@ -266,11 +268,12 @@ def test_model_training_shapes_metrics_and_submission_formatting(tmp_path):
     assert {"tn", "fp", "fn", "tp"}.issubset(confusion.columns)
     assert not tree_rules.empty
     assert (tmp_path / "outputs" / "decision_tree_rules.md").exists()
+    assert (tmp_path / "outputs" / "random_forest_model.pkl").exists()
     assert submission.columns.tolist() == ["TransactionID", "isFraud"]
     assert len(submission) == result["validation_rows"]
     assert predictions[
-        ["rules_based", "decision_tree", "neural_network", "random_contender"]
-    ].shape == (4, 4)
+        ["rules_based", "decision_tree", "random_forest", "neural_network", "random_contender"]
+    ].shape == (4, 5)
 
 
 def test_human_decision_tree_outputs_readable_rules_and_scores():
@@ -292,6 +295,26 @@ def test_human_decision_tree_outputs_readable_rules_and_scores():
     assert ((scores >= 0.0) & (scores <= 1.0)).all()
     assert not rules.empty
     assert "amount" in tree.rules_markdown() or "device" in tree.rules_markdown()
+
+
+def test_random_forest_prediction_output_shape_and_variety():
+    df = pd.DataFrame(
+        {
+            "TransactionID": range(16),
+            "isFraud": [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+            "amount": [5, 6, 7, 8, 6, 7, 8, 9, 50, 60, 70, 80, 55, 65, 75, 85],
+            "device": (["desktop", "mobile"] * 8),
+        }
+    )
+    forest = RandomForestFraudClassifier(
+        n_estimators=10, max_depth=2, random_state=0
+    ).fit(df, ["amount", "device"], "isFraud")
+    scores = forest.predict_proba(df)
+
+    assert len(forest.trees_) == 10
+    assert scores.shape == (16,)
+    assert ((scores >= 0.0) & (scores <= 1.0)).all()
+    assert scores[df["isFraud"] == 1].mean() > scores[df["isFraud"] == 0].mean()
 
 
 def test_neural_network_prediction_output_shape_and_submission_writer(tmp_path):
