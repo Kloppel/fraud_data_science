@@ -42,6 +42,32 @@ echo "Running model context."
 
 END_TS="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 echo "Finished full fraud workflow at ${END_TS}"
+
+echo "Staging result files."
+git add \
+  outputs/full_exploration \
+  outputs/full_feature_analysis \
+  outputs/full_model_training \
+  outputs/full_results_plots \
+  outputs/full_model_context \
+  logs/
+
+if git diff --cached --quiet; then
+  echo "No result-file changes to commit."
+else
+  echo "Committing result files."
+  git commit -m "$(cat <<EOF
+Refresh full fraud workflow outputs
+
+Full run started ${START_TS}, finished ${END_TS}.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+EOF
+)"
+  echo "Pushing result files."
+  git push origin main
+fi
+
 echo "Waiting 120 seconds before suspend."
 sleep 120
 systemctl suspend

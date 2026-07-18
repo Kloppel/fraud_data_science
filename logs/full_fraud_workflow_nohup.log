@@ -150,3 +150,79 @@ Finished full fraud workflow at 2026-07-18 13:17:44 CEST
 + echo 'Staging result files.'
 Staging result files.
 + git add outputs/full_exploration outputs/full_feature_analysis outputs/full_model_training outputs/full_results_plots outputs/full_model_context logs/
++ git diff --cached --quiet
++ echo 'Committing result files.'
+Committing result files.
+++ cat
++ git commit -m 'Refresh full fraud workflow outputs
+
+Full run started 2026-07-18 11:55:06 CEST, finished 2026-07-18 13:17:44 CEST.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>'
+[main 926e09b] Refresh full fraud workflow outputs
+ 55 files changed, 811750 insertions(+), 5 deletions(-)
+ create mode 100644 outputs/full_exploration/fraud_similarity_heatmap.svg
+ create mode 100644 outputs/full_exploration/fraud_similarity_matrix.csv
+ create mode 100644 outputs/full_exploration/fraud_similarity_matrix.pkl
+ create mode 100644 outputs/full_exploration/fraud_similarity_summary.json
+ create mode 100644 outputs/full_exploration/lda_separability.csv
+ create mode 100644 outputs/full_exploration/missingness_signal.csv
+ create mode 100644 outputs/full_exploration/missingness_signal.svg
+ create mode 100644 outputs/full_exploration/numeric_correlations.csv
+ create mode 100644 outputs/full_exploration/run_summary.json
+ create mode 100644 outputs/full_exploration/standardized_coefficients.csv
+ create mode 100644 outputs/full_exploration/univariate_feature_analysis.csv
+ create mode 100644 outputs/full_exploration/univariate_strength.svg
+ create mode 100644 outputs/full_feature_analysis/class_specific_permutation_importance.csv
+ create mode 100644 outputs/full_feature_analysis/composite_feature_ranking.csv
+ create mode 100644 outputs/full_feature_analysis/composite_ranking.svg
+ create mode 100644 outputs/full_feature_analysis/feature_analysis_report.md
+ create mode 100644 outputs/full_feature_analysis/feature_audit.csv
+ create mode 100644 outputs/full_feature_analysis/feature_selection_pipeline.pkl
+ create mode 100644 outputs/full_feature_analysis/feature_stability.csv
+ create mode 100644 outputs/full_feature_analysis/feature_subset_metrics.csv
+ create mode 100644 outputs/full_feature_analysis/model_importance.csv
+ create mode 100644 outputs/full_feature_analysis/redundancy_clusters.csv
+ create mode 100644 outputs/full_feature_analysis/redundancy_pairs.csv
+ create mode 100644 outputs/full_feature_analysis/run_summary.json
+ create mode 100644 outputs/full_feature_analysis/selected_features.csv
+ create mode 100644 outputs/full_feature_analysis/train_only_feature_ranking.csv
+ create mode 100644 outputs/full_model_context/decision_tree_decision_impacts.csv
+ create mode 100644 outputs/full_model_context/model_context_report.md
+ create mode 100644 outputs/full_model_context/model_context_summary.json
+ create mode 100644 outputs/full_model_context/training_performance_context.csv
+ create mode 100644 outputs/full_model_training/confusion_matrices.csv
+ create mode 100644 outputs/full_model_training/decision_tree_model.pkl
+ create mode 100644 outputs/full_model_training/decision_tree_rules.csv
+ create mode 100644 outputs/full_model_training/decision_tree_rules.md
+ create mode 100644 outputs/full_model_training/interpretable_rules.csv
+ create mode 100644 outputs/full_model_training/model_comparison_metrics.csv
+ create mode 100644 outputs/full_model_training/neural_network_model.pkl
+ create mode 100644 outputs/full_model_training/numeric_preprocessor.pkl
+ create mode 100644 outputs/full_model_training/random_contender_model.pkl
+ create mode 100644 outputs/full_model_training/random_forest_model.pkl
+ create mode 100644 outputs/full_model_training/rules_based_model.pkl
+ create mode 100644 outputs/full_model_training/run_summary.json
+ create mode 100644 outputs/full_model_training/test_submission.csv
+ create mode 100644 outputs/full_model_training/validation_predictions.csv
+ create mode 100644 outputs/full_model_training/validation_submission.csv
+ create mode 100644 outputs/full_results_plots/confusion_matrices.svg
+ create mode 100644 outputs/full_results_plots/decision_tree_leaf_predictions.svg
+ create mode 100644 outputs/full_results_plots/feature_selection_counts.svg
+ create mode 100644 outputs/full_results_plots/model_metric_comparison.svg
+ create mode 100644 outputs/full_results_plots/plot_index.md
+ create mode 100644 outputs/full_results_plots/plot_summary.json
+ create mode 100644 outputs/full_results_plots/top_composite_features.svg
+ create mode 100644 outputs/full_results_plots/top_missing_features.svg
++ echo 'Pushing result files.'
+Pushing result files.
++ git push origin main
+To https://github.com/Kloppel/fraud_data_science.git
+   715b735..926e09b  main -> main
++ echo 'Waiting 120 seconds before suspend.'
+Waiting 120 seconds before suspend.
++ sleep 120
++ systemctl suspend
+Call to Suspend failed: Interactive authentication required.
+++ echo 'Full fraud workflow failed at line 73 with exit code 1.'
+Full fraud workflow failed at line 73 with exit code 1.
