@@ -1,9 +1,10 @@
++ cd /home/pbuser/Desktop/fraud_data_science
 + trap 'echo "Full fraud workflow failed at line ${LINENO} with exit code $?."' ERR
 + mkdir -p logs outputs/full_exploration outputs/full_feature_analysis outputs/full_model_training
 ++ date '+%Y-%m-%d %H:%M:%S %Z'
-+ START_TS='2026-07-16 18:37:07 CEST'
-+ echo 'Started full fraud workflow at 2026-07-16 18:37:07 CEST'
-Started full fraud workflow at 2026-07-16 18:37:07 CEST
++ START_TS='2026-07-18 10:59:19 CEST'
++ echo 'Started full fraud workflow at 2026-07-18 10:59:19 CEST'
+Started full fraud workflow at 2026-07-18 10:59:19 CEST
 + PYTHON_CMD=(/home/pbuser/anaconda3/envs/fraud/bin/python)
 + echo 'Running exploration.'
 Running exploration.

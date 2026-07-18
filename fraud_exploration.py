@@ -739,7 +739,7 @@ def _default_similarity_columns(df: pd.DataFrame) -> list[str]:
     return [col for col in df.columns if col not in {"TransactionID", "isFraud"}][:20]
 
 
-def _model_matrix(df: pd.DataFrame) -> pd.DataFrame:
+def _model_matrix(df: pd.DataFrame, max_levels: int = 25) -> pd.DataFrame:
     """Build a small standardized numeric/one-hot design matrix."""
     parts = []
     for col in df.columns:
@@ -753,7 +753,9 @@ def _model_matrix(df: pd.DataFrame) -> pd.DataFrame:
             parts.append(_standardize(x).rename(col).to_frame())
         else:
             filled = _filled_category(df[col])
-            dummies = pd.get_dummies(filled, prefix=col, prefix_sep="__", dtype=float)
+            top = filled.value_counts().head(max_levels).index
+            trimmed = filled.where(filled.isin(top), "__other__")
+            dummies = pd.get_dummies(trimmed, prefix=col, prefix_sep="__", dtype=float)
             parts.append(dummies)
     if not parts:
         return pd.DataFrame(index=df.index)
