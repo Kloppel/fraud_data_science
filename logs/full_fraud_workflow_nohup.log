@@ -1,10 +1,9 @@
-+ cd /home/pbuser/Desktop/fraud_data_science
 + trap 'echo "Full fraud workflow failed at line ${LINENO} with exit code $?."' ERR
 + mkdir -p logs outputs/full_exploration outputs/full_feature_analysis outputs/full_model_training
 ++ date '+%Y-%m-%d %H:%M:%S %Z'
-+ START_TS='2026-07-18 10:59:19 CEST'
-+ echo 'Started full fraud workflow at 2026-07-18 10:59:19 CEST'
-Started full fraud workflow at 2026-07-18 10:59:19 CEST
++ START_TS='2026-07-18 11:55:06 CEST'
++ echo 'Started full fraud workflow at 2026-07-18 11:55:06 CEST'
+Started full fraud workflow at 2026-07-18 11:55:06 CEST
 + PYTHON_CMD=(/home/pbuser/anaconda3/envs/fraud/bin/python)
 + echo 'Running exploration.'
 Running exploration.
@@ -15,3 +14,139 @@ Running exploration.
   joined = transaction.merge(
 /home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:83: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
   joined["has_identity"] = (joined["_identity_join"] == "both").astype(int)
+{
+  "rows": 590540,
+  "fraud_rows": 20663,
+  "outputs": [
+    "fraud_fact_finder.md",
+    "dataset_audit.csv",
+    "univariate_feature_analysis.csv",
+    "missingness_signal.csv",
+    "numeric_correlations.csv",
+    "standardized_coefficients.csv",
+    "lda_separability.csv",
+    "univariate_strength.svg",
+    "missingness_signal.svg",
+    "fraud_similarity_matrix.csv",
+    "fraud_similarity_matrix.pkl",
+    "fraud_similarity_summary.json",
+    "fraud_similarity_heatmap.svg",
+    "run_summary.json"
+  ],
+  "shap": {
+    "available": true,
+    "reason": "shap is installed; add a fitted model to compute attributions"
+  },
+  "similarity": {
+    "n_sampled": 30,
+    "mean_similarity": 0.44827824336599986,
+    "median_similarity": 0.42426826664443074,
+    "min_similarity": 0.0,
+    "max_similarity": 1.0,
+    "n_nan_pairs": 0
+  }
+}
++ echo 'Running feature analysis.'
+Running feature analysis.
++ /home/pbuser/anaconda3/envs/fraud/bin/python fraud_feature_analysis.py --data-dir data --output-dir outputs/full_feature_analysis
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:83: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined["has_identity"] = (joined["_identity_join"] == "both").astype(int)
+{
+  "rows": 590540,
+  "train_rows": 442905,
+  "heldout_rows": 147635,
+  "features_analyzed": 433,
+  "selected_features": 248,
+  "has_two_classes": true,
+  "outputs": [
+    "feature_audit.csv",
+    "train_only_feature_ranking.csv",
+    "feature_stability.csv",
+    "redundancy_pairs.csv",
+    "redundancy_clusters.csv",
+    "model_importance.csv",
+    "class_specific_permutation_importance.csv",
+    "composite_feature_ranking.csv",
+    "selected_features.csv",
+    "feature_subset_metrics.csv",
+    "feature_analysis_report.md",
+    "composite_ranking.svg",
+    "feature_selection_pipeline.pkl"
+  ]
+}
++ echo 'Running model training.'
+Running model training.
++ /home/pbuser/anaconda3/envs/fraud/bin/python fraud_model_training.py --data-dir data --output-dir outputs/full_model_training --selected-features-path outputs/full_feature_analysis/selected_features.csv
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:83: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined["has_identity"] = (joined["_identity_join"] == "both").astype(int)
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:80: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined = transaction.merge(
+/home/pbuser/Desktop/fraud_data_science/fraud_preprocessing.py:83: PerformanceWarning: DataFrame is highly fragmented.  This is usually the result of calling `frame.insert` many times, which has poor performance.  Consider joining all columns at once using pd.concat(axis=1) instead. To get a de-fragmented frame, use `newframe = frame.copy()`
+  joined["has_identity"] = (joined["_identity_join"] == "both").astype(int)
+{
+  "rows": 590540,
+  "train_rows": 442905,
+  "validation_rows": 147635,
+  "features_used": 60,
+  "test_submission_written": true,
+  "outputs": [
+    "model_comparison_metrics.csv",
+    "confusion_matrices.csv",
+    "rules_based_model.pkl",
+    "decision_tree_model.pkl",
+    "random_forest_model.pkl",
+    "neural_network_model.pkl",
+    "random_contender_model.pkl",
+    "numeric_preprocessor.pkl",
+    "validation_predictions.csv",
+    "validation_submission.csv",
+    "interpretable_rules.csv",
+    "decision_tree_rules.csv",
+    "decision_tree_rules.md",
+    "test_submission.csv"
+  ]
+}
++ echo 'Running result plots.'
+Running result plots.
++ /home/pbuser/anaconda3/envs/fraud/bin/python fraud_results_plots.py --exploration-dir outputs/full_exploration --feature-dir outputs/full_feature_analysis --model-dir outputs/full_model_training --output-dir outputs/full_results_plots
+{
+  "exploration_dir": "outputs/full_exploration",
+  "feature_dir": "outputs/full_feature_analysis",
+  "model_dir": "outputs/full_model_training",
+  "plots_written": [
+    "model_metric_comparison.svg",
+    "confusion_matrices.svg",
+    "decision_tree_leaf_predictions.svg",
+    "feature_selection_counts.svg",
+    "top_composite_features.svg",
+    "top_missing_features.svg"
+  ]
+}
++ echo 'Running model context.'
+Running model context.
++ /home/pbuser/anaconda3/envs/fraud/bin/python fraud_model_context.py --model-dir outputs/full_model_training --output-dir outputs/full_model_context
+{
+  "model_dir": "outputs/full_model_training",
+  "outputs": [
+    "training_performance_context.csv",
+    "decision_tree_decision_impacts.csv",
+    "model_context_report.md"
+  ]
+}
+++ date '+%Y-%m-%d %H:%M:%S %Z'
++ END_TS='2026-07-18 13:17:44 CEST'
++ echo 'Finished full fraud workflow at 2026-07-18 13:17:44 CEST'
+Finished full fraud workflow at 2026-07-18 13:17:44 CEST
++ echo 'Staging result files.'
+Staging result files.
++ git add outputs/full_exploration outputs/full_feature_analysis outputs/full_model_training outputs/full_results_plots outputs/full_model_context logs/

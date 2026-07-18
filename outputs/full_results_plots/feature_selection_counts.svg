@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="114">
+<rect width="100%" height="100%" fill="white"/>
+<text x="12.0" y="28.0" font-size="20" font-family="sans-serif" font-weight="bold" fill="#222">Feature Selection Counts</text>
+<text x="12.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">selected</text>
+<rect x="330.0" y="54.0" width="520.0" height="16.0" fill="#2a6f97"/>
+<text x="858.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">248</text>
+<text x="12.0" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">dropped</text>
+<rect x="330.0" y="82.0" width="387.9" height="16.0" fill="#2a6f97"/>
+<text x="725.9" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">185</text>
+</svg>

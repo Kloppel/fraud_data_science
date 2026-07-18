@@ -1,0 +1,23 @@
+{
+  "rows": 590540,
+  "train_rows": 442905,
+  "heldout_rows": 147635,
+  "features_analyzed": 433,
+  "selected_features": 248,
+  "has_two_classes": true,
+  "outputs": [
+    "feature_audit.csv",
+    "train_only_feature_ranking.csv",
+    "feature_stability.csv",
+    "redundancy_pairs.csv",
+    "redundancy_clusters.csv",
+    "model_importance.csv",
+    "class_specific_permutation_importance.csv",
+    "composite_feature_ranking.csv",
+    "selected_features.csv",
+    "feature_subset_metrics.csv",
+    "feature_analysis_report.md",
+    "composite_ranking.svg",
+    "feature_selection_pipeline.pkl"
+  ]
+}

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="618">
+<rect width="100%" height="100%" fill="white"/>
+<text x="12.0" y="28.0" font-size="20" font-family="sans-serif" font-weight="bold" fill="#222">Features With Most Missing Values</text>
+<text x="12.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_24</text>
+<rect x="330.0" y="54.0" width="520.0" height="16.0" fill="#2a6f97"/>
+<text x="858.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.992</text>
+<text x="12.0" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_25</text>
+<rect x="330.0" y="82.0" width="519.7" height="16.0" fill="#2a6f97"/>
+<text x="857.7" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9913</text>
+<text x="12.0" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_07</text>
+<rect x="330.0" y="110.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9913</text>
+<text x="12.0" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_08</text>
+<rect x="330.0" y="138.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9913</text>
+<text x="12.0" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_21</text>
+<rect x="330.0" y="166.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9913</text>
+<text x="12.0" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_26</text>
+<rect x="330.0" y="194.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9913</text>
+<text x="12.0" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_23</text>
+<rect x="330.0" y="222.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9912</text>
+<text x="12.0" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_27</text>
+<rect x="330.0" y="250.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9912</text>
+<text x="12.0" y="291.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_22</text>
+<rect x="330.0" y="278.0" width="519.6" height="16.0" fill="#2a6f97"/>
+<text x="857.6" y="291.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9912</text>
+<text x="12.0" y="319.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">dist2</text>
+<rect x="330.0" y="306.0" width="490.8" height="16.0" fill="#2a6f97"/>
+<text x="828.8" y="319.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9363</text>
+<text x="12.0" y="347.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D7</text>
+<rect x="330.0" y="334.0" width="489.7" height="16.0" fill="#2a6f97"/>
+<text x="827.7" y="347.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9341</text>
+<text x="12.0" y="375.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_18</text>
+<rect x="330.0" y="362.0" width="484.2" height="16.0" fill="#2a6f97"/>
+<text x="822.2" y="375.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9236</text>
+<text x="12.0" y="403.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D13</text>
+<rect x="330.0" y="390.0" width="469.2" height="16.0" fill="#2a6f97"/>
+<text x="807.2" y="403.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8951</text>
+<text x="12.0" y="431.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D14</text>
+<rect x="330.0" y="418.0" width="469.0" height="16.0" fill="#2a6f97"/>
+<text x="807.0" y="431.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8947</text>
+<text x="12.0" y="459.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D12</text>
+<rect x="330.0" y="446.0" width="466.8" height="16.0" fill="#2a6f97"/>
+<text x="804.8" y="459.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8904</text>
+<text x="12.0" y="487.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_03</text>
+<rect x="330.0" y="474.0" width="465.3" height="16.0" fill="#2a6f97"/>
+<text x="803.3" y="487.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8877</text>
+<text x="12.0" y="515.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_04</text>
+<rect x="330.0" y="502.0" width="465.3" height="16.0" fill="#2a6f97"/>
+<text x="803.3" y="515.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8877</text>
+<text x="12.0" y="543.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D6</text>
+<rect x="330.0" y="530.0" width="459.2" height="16.0" fill="#2a6f97"/>
+<text x="797.2" y="543.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8761</text>
+<text x="12.0" y="571.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_33</text>
+<rect x="330.0" y="558.0" width="459.2" height="16.0" fill="#2a6f97"/>
+<text x="797.2" y="571.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8759</text>
+<text x="12.0" y="599.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_10</text>
+<rect x="330.0" y="586.0" width="457.7" height="16.0" fill="#2a6f97"/>
+<text x="795.7" y="599.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.8731</text>
+</svg>

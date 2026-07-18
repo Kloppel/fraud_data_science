@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="618">
+<rect width="100%" height="100%" fill="white"/>
+<text x="12.0" y="28.0" font-size="20" font-family="sans-serif" font-weight="bold" fill="#222">Top Composite Feature Scores</text>
+<text x="12.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">card1</text>
+<rect x="330.0" y="54.0" width="520.0" height="16.0" fill="#2a6f97"/>
+<text x="858.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.5082</text>
+<text x="12.0" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">C11</text>
+<rect x="330.0" y="82.0" width="494.8" height="16.0" fill="#2a6f97"/>
+<text x="832.8" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.4835</text>
+<text x="12.0" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">C12</text>
+<rect x="330.0" y="110.0" width="394.1" height="16.0" fill="#2a6f97"/>
+<text x="732.1" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3851</text>
+<text x="12.0" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">R_emaildomain</text>
+<rect x="330.0" y="138.0" width="394.0" height="16.0" fill="#2a6f97"/>
+<text x="732.0" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.385</text>
+<text x="12.0" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">card2</text>
+<rect x="330.0" y="166.0" width="391.1" height="16.0" fill="#2a6f97"/>
+<text x="729.1" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3822</text>
+<text x="12.0" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">C14</text>
+<rect x="330.0" y="194.0" width="375.6" height="16.0" fill="#2a6f97"/>
+<text x="713.6" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3671</text>
+<text x="12.0" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">V168</text>
+<rect x="330.0" y="222.0" width="364.4" height="16.0" fill="#2a6f97"/>
+<text x="702.4" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3561</text>
+<text x="12.0" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">DeviceInfo</text>
+<rect x="330.0" y="250.0" width="364.4" height="16.0" fill="#2a6f97"/>
+<text x="702.4" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3561</text>
+<text x="12.0" y="291.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_13</text>
+<rect x="330.0" y="278.0" width="362.9" height="16.0" fill="#2a6f97"/>
+<text x="700.9" y="291.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3547</text>
+<text x="12.0" y="319.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_17</text>
+<rect x="330.0" y="306.0" width="357.5" height="16.0" fill="#2a6f97"/>
+<text x="695.5" y="319.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3494</text>
+<text x="12.0" y="347.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">V218</text>
+<rect x="330.0" y="334.0" width="350.2" height="16.0" fill="#2a6f97"/>
+<text x="688.2" y="347.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3422</text>
+<text x="12.0" y="375.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">V219</text>
+<rect x="330.0" y="362.0" width="347.0" height="16.0" fill="#2a6f97"/>
+<text x="685.0" y="375.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3391</text>
+<text x="12.0" y="403.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">C8</text>
+<rect x="330.0" y="390.0" width="342.8" height="16.0" fill="#2a6f97"/>
+<text x="680.8" y="403.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.335</text>
+<text x="12.0" y="431.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">id_19</text>
+<rect x="330.0" y="418.0" width="337.7" height="16.0" fill="#2a6f97"/>
+<text x="675.7" y="431.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.33</text>
+<text x="12.0" y="459.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">V264</text>
+<rect x="330.0" y="446.0" width="332.8" height="16.0" fill="#2a6f97"/>
+<text x="670.8" y="459.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3253</text>
+<text x="12.0" y="487.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">D5</text>
+<rect x="330.0" y="474.0" width="330.8" height="16.0" fill="#2a6f97"/>
+<text x="668.8" y="487.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3233</text>
+<text x="12.0" y="515.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">addr2</text>
+<rect x="330.0" y="502.0" width="326.6" height="16.0" fill="#2a6f97"/>
+<text x="664.6" y="515.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3191</text>
+<text x="12.0" y="543.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">V258</text>
+<rect x="330.0" y="530.0" width="324.4" height="16.0" fill="#2a6f97"/>
+<text x="662.4" y="543.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.317</text>
+<text x="12.0" y="571.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">C4</text>
+<rect x="330.0" y="558.0" width="321.3" height="16.0" fill="#2a6f97"/>
+<text x="659.3" y="571.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.314</text>
+<text x="12.0" y="599.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">card3</text>
+<rect x="330.0" y="586.0" width="317.8" height="16.0" fill="#2a6f97"/>
+<text x="655.8" y="599.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3106</text>
+</svg>

@@ -1,0 +1,31 @@
+{
+  "rows": 590540,
+  "fraud_rows": 20663,
+  "outputs": [
+    "fraud_fact_finder.md",
+    "dataset_audit.csv",
+    "univariate_feature_analysis.csv",
+    "missingness_signal.csv",
+    "numeric_correlations.csv",
+    "standardized_coefficients.csv",
+    "lda_separability.csv",
+    "univariate_strength.svg",
+    "missingness_signal.svg",
+    "fraud_similarity_matrix.csv",
+    "fraud_similarity_matrix.pkl",
+    "fraud_similarity_summary.json",
+    "fraud_similarity_heatmap.svg"
+  ],
+  "shap": {
+    "available": true,
+    "reason": "shap is installed; add a fitted model to compute attributions"
+  },
+  "similarity": {
+    "n_sampled": 30,
+    "mean_similarity": 0.44827824336599986,
+    "median_similarity": 0.42426826664443074,
+    "min_similarity": 0.0,
+    "max_similarity": 1.0,
+    "n_nan_pairs": 0
+  }
+}

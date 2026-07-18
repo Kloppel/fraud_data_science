@@ -1,0 +1,16 @@
+item,value,context
+best_roc_auc,0.8112938782857305,random_forest had the highest roc_auc.
+best_pr_auc,0.2929638630302751,random_forest had the highest pr_auc.
+best_precision,0.9591836734693876,rules_based had the highest precision.
+best_recall,0.6521486643437863,decision_tree had the highest recall.
+best_f1,0.1892869250762797,random_forest had the highest f1.
+validation_positive_rate,0.03499170250956751,Validation rows contained 5166 fraud positives out of 147635 rows.
+rows,590540.0,Run summary reported rows.
+train_rows,442905.0,Run summary reported train_rows.
+validation_rows,147635.0,Run summary reported validation_rows.
+features_used,60.0,Run summary reported features_used.
+rules_based_confusion_summary,142514.0,"rules_based produced TP=47, FP=2, FN=5119, TN=142467 at the 0.5 threshold."
+decision_tree_confusion_summary,115390.0,"decision_tree produced TP=3369, FP=30448, FN=1797, TN=112021 at the 0.5 threshold."
+random_forest_confusion_summary,118939.0,"random_forest produced TP=3350, FP=26880, FN=1816, TN=115589 at the 0.5 threshold."
+neural_network_confusion_summary,117617.0,"neural_network produced TP=3123, FP=27975, FN=2043, TN=114494 at the 0.5 threshold."
+random_contender_confusion_summary,142469.0,"random_contender produced TP=0, FP=0, FN=5166, TN=142469 at the 0.5 threshold."

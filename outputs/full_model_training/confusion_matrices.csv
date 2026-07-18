@@ -1,0 +1,6 @@
+model,tn,fp,fn,tp
+rules_based,142467,2,5119,47
+decision_tree,112021,30448,1797,3369
+random_forest,115589,26880,1816,3350
+neural_network,114494,27975,2043,3123
+random_contender,142469,0,5166,0

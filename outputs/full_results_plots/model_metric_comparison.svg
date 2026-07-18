@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="940">
+<rect width="100%" height="100%" fill="white"/>
+<text x="12.0" y="28.0" font-size="20" font-family="sans-serif" font-weight="bold" fill="#222">Model Performance Metrics</text>
+<text x="12.0" y="72.0" font-size="13" font-family="sans-serif" font-weight="bold" fill="#222">rules_based</text>
+<text x="170.0" y="93.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">roc_auc</text>
+<rect x="280.0" y="80.0" width="262.4" height="16.0" fill="#2a6f97"/>
+<text x="552.4" y="93.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.505</text>
+<text x="170.0" y="127.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">pr_auc</text>
+<rect x="280.0" y="114.0" width="24.8" height="16.0" fill="#7a9e3f"/>
+<text x="314.8" y="127.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.048</text>
+<text x="170.0" y="161.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">precision</text>
+<rect x="280.0" y="148.0" width="498.8" height="16.0" fill="#c26a2e"/>
+<text x="788.8" y="161.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.959</text>
+<text x="170.0" y="195.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">recall</text>
+<rect x="280.0" y="182.0" width="4.7" height="16.0" fill="#6a4c93"/>
+<text x="294.7" y="195.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.009</text>
+<text x="170.0" y="229.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">f1</text>
+<rect x="280.0" y="216.0" width="9.4" height="16.0" fill="#8f2d56"/>
+<text x="299.4" y="229.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.018</text>
+<text x="12.0" y="254.0" font-size="13" font-family="sans-serif" font-weight="bold" fill="#222">decision_tree</text>
+<text x="170.0" y="275.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">roc_auc</text>
+<rect x="280.0" y="262.0" width="397.5" height="16.0" fill="#2a6f97"/>
+<text x="687.5" y="275.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.764</text>
+<text x="170.0" y="309.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">pr_auc</text>
+<rect x="280.0" y="296.0" width="86.2" height="16.0" fill="#7a9e3f"/>
+<text x="376.2" y="309.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.166</text>
+<text x="170.0" y="343.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">precision</text>
+<rect x="280.0" y="330.0" width="51.8" height="16.0" fill="#c26a2e"/>
+<text x="341.8" y="343.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.100</text>
+<text x="170.0" y="377.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">recall</text>
+<rect x="280.0" y="364.0" width="339.1" height="16.0" fill="#6a4c93"/>
+<text x="629.1" y="377.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.652</text>
+<text x="170.0" y="411.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">f1</text>
+<rect x="280.0" y="398.0" width="89.9" height="16.0" fill="#8f2d56"/>
+<text x="379.9" y="411.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.173</text>
+<text x="12.0" y="436.0" font-size="13" font-family="sans-serif" font-weight="bold" fill="#222">random_forest</text>
+<text x="170.0" y="457.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">roc_auc</text>
+<rect x="280.0" y="444.0" width="421.9" height="16.0" fill="#2a6f97"/>
+<text x="711.9" y="457.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.811</text>
+<text x="170.0" y="491.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">pr_auc</text>
+<rect x="280.0" y="478.0" width="152.3" height="16.0" fill="#7a9e3f"/>
+<text x="442.3" y="491.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.293</text>
+<text x="170.0" y="525.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">precision</text>
+<rect x="280.0" y="512.0" width="57.6" height="16.0" fill="#c26a2e"/>
+<text x="347.6" y="525.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.111</text>
+<text x="170.0" y="559.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">recall</text>
+<rect x="280.0" y="546.0" width="337.2" height="16.0" fill="#6a4c93"/>
+<text x="627.2" y="559.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.648</text>
+<text x="170.0" y="593.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">f1</text>
+<rect x="280.0" y="580.0" width="98.4" height="16.0" fill="#8f2d56"/>
+<text x="388.4" y="593.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.189</text>
+<text x="12.0" y="618.0" font-size="13" font-family="sans-serif" font-weight="bold" fill="#222">neural_network</text>
+<text x="170.0" y="639.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">roc_auc</text>
+<rect x="280.0" y="626.0" width="398.6" height="16.0" fill="#2a6f97"/>
+<text x="688.6" y="639.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.767</text>
+<text x="170.0" y="673.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">pr_auc</text>
+<rect x="280.0" y="660.0" width="82.2" height="16.0" fill="#7a9e3f"/>
+<text x="372.2" y="673.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.158</text>
+<text x="170.0" y="707.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">precision</text>
+<rect x="280.0" y="694.0" width="52.2" height="16.0" fill="#c26a2e"/>
+<text x="342.2" y="707.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.100</text>
+<text x="170.0" y="741.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">recall</text>
+<rect x="280.0" y="728.0" width="314.4" height="16.0" fill="#6a4c93"/>
+<text x="604.4" y="741.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.605</text>
+<text x="170.0" y="775.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">f1</text>
+<rect x="280.0" y="762.0" width="89.6" height="16.0" fill="#8f2d56"/>
+<text x="379.6" y="775.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.172</text>
+<text x="12.0" y="800.0" font-size="13" font-family="sans-serif" font-weight="bold" fill="#222">random_contender</text>
+<text x="170.0" y="821.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">roc_auc</text>
+<rect x="280.0" y="808.0" width="260.0" height="16.0" fill="#2a6f97"/>
+<text x="550.0" y="821.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.500</text>
+<text x="170.0" y="855.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">pr_auc</text>
+<rect x="280.0" y="842.0" width="18.0" height="16.0" fill="#7a9e3f"/>
+<text x="308.0" y="855.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.035</text>
+<text x="170.0" y="889.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">precision</text>
+<rect x="280.0" y="876.0" width="0.0" height="16.0" fill="#c26a2e"/>
+<text x="290.0" y="889.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.000</text>
+<text x="170.0" y="923.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">recall</text>
+<rect x="280.0" y="910.0" width="0.0" height="16.0" fill="#6a4c93"/>
+<text x="290.0" y="923.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.000</text>
+<text x="170.0" y="957.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">f1</text>
+<rect x="280.0" y="944.0" width="0.0" height="16.0" fill="#8f2d56"/>
+<text x="290.0" y="957.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.000</text>
+</svg>

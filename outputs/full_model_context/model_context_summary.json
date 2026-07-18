@@ -1,0 +1,8 @@
+{
+  "model_dir": "outputs/full_model_training",
+  "outputs": [
+    "training_performance_context.csv",
+    "decision_tree_decision_impacts.csv",
+    "model_context_report.md"
+  ]
+}

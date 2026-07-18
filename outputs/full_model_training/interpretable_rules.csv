@@ -1,0 +1,13 @@
+feature,kind,operator,value,support,precision,lift
+card1,categorical,==,12473,33,1.0,28.58004775117765
+DeviceInfo,categorical,==,VS5012 Build/NRD90M,23,1.0,28.58004775117765
+DeviceInfo,categorical,==,SM-N920A Build/MMB29K,20,1.0,28.58004775117765
+DeviceInfo,categorical,==,Z835 Build/NMF26V,17,1.0,28.58004775117765
+id_17,categorical,==,110.0,12,1.0,28.58004775117765
+DeviceInfo,categorical,==,G3123 Build/40.0.A.6.175,11,1.0,28.58004775117765
+DeviceInfo,categorical,==,RCT6203W46 Build/KOT49H,9,1.0,28.58004775117765
+DeviceInfo,categorical,==,Z813 Build/LMY47O,9,1.0,28.58004775117765
+card1,categorical,==,3342,8,1.0,28.58004775117765
+DeviceInfo,categorical,==,XT890 Build/9.8.2I-50_SML-25,8,1.0,28.58004775117765
+card1,categorical,==,4078,7,1.0,28.58004775117765
+DeviceInfo,categorical,==,NOKIA,7,1.0,28.58004775117765

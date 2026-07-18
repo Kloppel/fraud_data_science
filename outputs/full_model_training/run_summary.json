@@ -1,0 +1,23 @@
+{
+  "rows": 590540,
+  "train_rows": 442905,
+  "validation_rows": 147635,
+  "features_used": 60,
+  "test_submission_written": true,
+  "outputs": [
+    "model_comparison_metrics.csv",
+    "confusion_matrices.csv",
+    "rules_based_model.pkl",
+    "decision_tree_model.pkl",
+    "random_forest_model.pkl",
+    "neural_network_model.pkl",
+    "random_contender_model.pkl",
+    "numeric_preprocessor.pkl",
+    "validation_predictions.csv",
+    "validation_submission.csv",
+    "interpretable_rules.csv",
+    "decision_tree_rules.csv",
+    "decision_tree_rules.md",
+    "test_submission.csv"
+  ]
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="282">
+<rect width="100%" height="100%" fill="white"/>
+<text x="12.0" y="28.0" font-size="20" font-family="sans-serif" font-weight="bold" fill="#222">Decision Tree Leaf Fraud Probabilities</text>
+<text x="12.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_8</text>
+<rect x="330.0" y="54.0" width="520.0" height="16.0" fill="#2a6f97"/>
+<text x="858.0" y="67.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.9288</text>
+<text x="12.0" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_7</text>
+<rect x="330.0" y="82.0" width="436.6" height="16.0" fill="#2a6f97"/>
+<text x="774.6" y="95.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.7799</text>
+<text x="12.0" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_6</text>
+<rect x="330.0" y="110.0" width="416.8" height="16.0" fill="#2a6f97"/>
+<text x="754.8" y="123.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.7445</text>
+<text x="12.0" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_2</text>
+<rect x="330.0" y="138.0" width="367.3" height="16.0" fill="#2a6f97"/>
+<text x="705.3" y="151.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.6562</text>
+<text x="12.0" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_5</text>
+<rect x="330.0" y="166.0" width="241.3" height="16.0" fill="#2a6f97"/>
+<text x="579.3" y="179.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.431</text>
+<text x="12.0" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_4</text>
+<rect x="330.0" y="194.0" width="202.1" height="16.0" fill="#2a6f97"/>
+<text x="540.1" y="207.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.361</text>
+<text x="12.0" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_1</text>
+<rect x="330.0" y="222.0" width="179.8" height="16.0" fill="#2a6f97"/>
+<text x="517.8" y="235.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.3211</text>
+<text x="12.0" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">leaf_3</text>
+<rect x="330.0" y="250.0" width="82.1" height="16.0" fill="#2a6f97"/>
+<text x="420.1" y="263.0" font-size="12" font-family="sans-serif" font-weight="normal" fill="#222">0.1467</text>
+</svg>
